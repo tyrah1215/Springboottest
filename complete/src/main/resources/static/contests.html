@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<script src="data.js"></script>
+<style>
+table, th, td {
+  border:1px solid black;
+}
+</style>
+<body>
+
+  <script>
+    async function addContest() {
+    var name = document.getElementById("name").value;
+    var description = document.getElementById("description").value;
+    var start = document.getElementById("start").value;
+    var end = document.getElementById("end").value;
+    var details = document.getElementById("details").value;
+    var rules = document.getElementById("rules").value;
+    var money = document.getElementById("money").value;
+
+    var json = JSON.stringify({contestName : name, description : description, startDate : start, endDate : end, details : details, rules : rules, moneyReward: money});
+  
+    await saveContests(json);
+
+    location.reload();
+  }
+
+  async function deleteContest() {
+    var id = document.getElementById("toDelete").value;
+
+    await deleteContests(id);
+
+    location.reload();
+  }
+
+  async function getContest() {
+    var id = document.getElementById("toGet").value;
+
+    var contest = await getContests(id);
+
+    alert(JSON.stringify(contest));
+
+    location.reload();
+  }
+
+  async function updateContest() {
+    var id = document.getElementById("id2").value;
+    var name = document.getElementById("name2").value;
+    var description = document.getElementById("description2").value;
+    var start = document.getElementById("start2").value;
+    var end = document.getElementById("end2").value;
+    var details = document.getElementById("details2").value;
+    var rules = document.getElementById("rules2").value;
+    var money = document.getElementById("money2").value;
+
+    var json = JSON.stringify({id : id, contestName : name, description : description, startDate : start, endDate : end, details : details, rules : rules, moneyReward: money});
+  
+    await updateContests(id, json);
+
+    location.reload();
+  }
+  </script>
+
+<h2>Contests</h2>
+
+<table style="width:100%" id="contests">
+  <tr>
+    <th>Id</th>
+    <th>contestName</th>
+    <th>Description</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+    <th>Details</th>
+    <th>Rules</th>
+    <th>Money Reward</th>
+  </tr>
+
+
+</table>
+
+<br/>
+<br/>
+<br/>
+
+<div>
+  <h2>Add</h2>
+  Name: <input id="name"/><br/>
+  Description: <input id="description"/><br/>
+  Start Date: <input id="start"/><br/>
+  End Date: <input id="end"/><br/>
+  Details: <input id="details"/><br/>
+  Rules: <input id="rules"/><br/>
+  Money Reward: <input id="money"/><br/>
+
+
+  <button type="button" onclick="addContest()">Add New Contest</button>
+</div>
+
+<br/>
+<br/>
+<br/>
+
+<div>
+  <h2>Delete</h2>
+  Delete By Id: <input id="toDelete"/>
+
+  <button type="button" onclick="deleteContest()">Delete by Id</button>
+</div>
+
+<br/>
+<br/>
+<br/>
+
+<div>
+  <h2>Get</h2>
+  Get By Id: <input id="toGet"/>
+
+  <button type="button" onclick="getContest()">Get by Id</button>
+</div>
+
+<br/>
+<br/>
+<br/>
+
+<div>
+  <h2>Update</h2>
+  Id: <input id="id2" /><br/>
+  Name: <input id="name2"/><br/>
+  Description: <input id="description2"/><br/>
+  Start Date: <input id="start2"/><br/>
+  End Date: <input id="end2"/><br/>
+  Details: <input id="details2"/><br/>
+  Rules: <input id="rules2"/><br/>
+  Money Reward: <input id="money2"/><br/>
+
+
+  <button type="button" onclick="updateContest()">Update Contest</button>
+</div>
+
+<script>
+
+  function append(contest) {
+    var tr = document.createElement("tr");
+
+    var id = document.createElement("td");
+
+    id.innerText = contest["id"];
+
+    var name = document.createElement("td");
+    
+    name.innerText = contest["contestName"];
+
+    var description = document.createElement("td");
+
+    description.innerText = contest["description"];
+
+    var startDate = document.createElement("td");
+
+    startDate.innerText = contest["startDate"];
+
+    var endDate = document.createElement("td");
+
+    endDate.innerText = contest["endDate"];
+
+    var details = document.createElement("td");
+
+    details.innerText = contest["details"];
+
+    var rules = document.createElement("td");
+
+    rules.innerText = contest["rules"];
+
+    var moneyReward = document.createElement("td");
+
+    moneyReward.innerText = contest["moneyReward"];
+
+    tr.appendChild(id);
+    tr.appendChild(name);
+    tr.appendChild(description);
+    tr.appendChild(startDate);
+    tr.appendChild(endDate);
+    tr.appendChild(details);
+    tr.appendChild(rules);
+    tr.appendChild(moneyReward);
+
+    document.getElementById("contests").appendChild(tr);
+  }
+
+  async function populateTable() {
+    var contests = await listContests();
+
+    for (const contest of contests) {
+      append(contest);
+    }
+}
+
+populateTable();
+
+</script>
+
+</body>
+</html>
+
